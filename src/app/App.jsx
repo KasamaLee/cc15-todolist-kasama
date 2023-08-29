@@ -1,5 +1,5 @@
 import './App.scss';
-import Header from './Header.jsx';
+import Header from '../components/Header.jsx';
 
 function App() {
   return (
