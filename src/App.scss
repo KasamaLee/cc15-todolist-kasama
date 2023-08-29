@@ -1,5 +1,4 @@
-$header-height: 60px;
-$sidebar-width: 300px;
+@import './index.scss';
 
 .todo {
     display: grid;
@@ -30,3 +29,4 @@ $sidebar-width: 300px;
         grid-column-end: -1;
     }
 }
+
