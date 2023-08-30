@@ -7,7 +7,7 @@ $grey-light: #eaeaea;
 $grey-dark: #808080;
 $white: #fff;
 $header-height: 60px;
-$sidebar-width: 300px;
+$sidebar-width: 375px;
 
 // CSS Global Reset
 *,
@@ -29,4 +29,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+li {
+  list-style: none;
 }
