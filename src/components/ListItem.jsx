@@ -22,7 +22,9 @@ function ListItem(props) {
     </li>
   );
 }
+
 // CSS + JS Value == DynamicsClassName
 // not-active :  className='list__item'
 // active :   className='list__item active'
+
 export default ListItem;
