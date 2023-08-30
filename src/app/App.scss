@@ -36,32 +36,35 @@
     flex-direction: column;
     gap: 10px;
     padding: 20px 30px;
-    height: calc(100vh - $header-height);;
+    height: calc(100vh - $header-height);
+    ;
 }
 
-// Block
-.list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+.accordion {
 
-    // Element
+    // ELEMENT
     &__item {
         display: flex;
         align-items: center;
         gap: 15px;
-        font-size: 2rem;
+        font-size: 1.8rem;
         padding: 10px;
         border-radius: 4px;
         cursor: pointer;
+        font-weight: 900;
 
-        &:hover {
-            background-color: $grey-light;
+        // MODIFIER
+        &__icon {
+            cursor: pointer;
+            transition: 1s;
         }
 
-        // Modifier
+        &__active {
+            transform: rotate(-90deg);
+        }
+        
         &__text {
-            font-weight: 500;
+            font-weight: inherit;
         }
     }
 }
