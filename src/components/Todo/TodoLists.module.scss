@@ -3,6 +3,7 @@
 .todo__lists {
   // padding: $todo-content-padding;
 }
+
 .todo {
   display: flex;
   gap: 15px;
@@ -53,8 +54,7 @@
     }
   }
 
-  &__date {
-  }
+  &__date {}
 
   &__action {
     flex-basis: 80px;
@@ -67,6 +67,7 @@
   &__edit,
   &__delete {
     display: block;
+
     &:hover {
       color: $primary;
     }
