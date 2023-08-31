@@ -31,15 +31,16 @@
 .todo__error {
   justify-self: start;
   padding: 10px;
-  font-size: 10px;
-  font-weight: 800;
+  font-size: $text-base;
+  font-weight: 600;
   color: $primary;
+  flex: 1;
 }
 .todo__form__buttons {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  flex: 1;
+  // flex: 1;
 
   & > button {
     border: none;
