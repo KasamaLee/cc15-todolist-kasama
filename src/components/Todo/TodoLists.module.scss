@@ -2,5 +2,8 @@
 
 .todo__lists {
   // padding: $todo-content-padding;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
