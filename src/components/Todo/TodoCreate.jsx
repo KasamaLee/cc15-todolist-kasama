@@ -27,12 +27,15 @@ CC4 - React State (1 ในฟังก์ชันของกลุ่ม Reac
     const [state, setState] = useState(initialState: any)
 - element 1: current State
 - element 2: Fn สำหรับ setState
+- เมื่อ State เปลี่ยน Function Component จะ Rerender
+- Rerenderer 1 ครั้ง == Code ทั้งหมดใน FC จะถูกรันใหม่
 */
 
 // #1 : FC = Function Component (Render)
 function TodoCreate() {
     // HOOk FN
     const [isOpenForm, setIsOpenForm] = useState(false);
+    console.log(isOpenForm);
 
     // let active = true;
 
