@@ -41,7 +41,7 @@ function TodoCreate() {
 
     // #2 : JS Function (Logic)
     const handleClick = function (event) {
-        // console.log('clicked', event);
+
         setIsOpenForm(!isOpenForm);
         // active = !active;
         // console.log('clicked', active);
@@ -50,7 +50,10 @@ function TodoCreate() {
     return (
         <>
             {isOpenForm ? (
-                < TodoForm textSubmit='Add Task'/>
+                < TodoForm
+                    textSubmit='Add Task'
+                    setIsOpenForm={setIsOpenForm}
+                />
             ) : (
                 <div className={styles.todo__create} onClick={handleClick}>
                     <div className={styles.todo__create__button}>
