@@ -22,24 +22,34 @@ props = {
 
 
 function TodoForm(props) {
-  const [isError, setIsError] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [taskInput, setTaskInput] = useState('');
 
   const handleChangeInput = function (event) {
-    // console.log('typing', event.target.value);
+    setTaskInput(event.target.value);
+
+    if (isError) setIsError(false);
     setTaskInput(event.target.value);
   };
 
   const handleSubmit = function (event) {
     event.preventDefault();
+  
     // FormValidation
     // case1 : submit ได้
     // case2 : submit ไม่ได้ => แสดง Error
     console.log('submit');
+    if (taskInput.trim() === '') {
+      setIsError(true)
+    } else {
+      console.log('success');
+    }
+
   };
 
   const handleCancel = function () {
     console.log('cancel');
+    // console.log(props);
     props.setIsOpenForm(false);
   };
 
