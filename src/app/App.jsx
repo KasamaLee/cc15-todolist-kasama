@@ -31,6 +31,7 @@ function App() {
 
   const [allTodos, setAllTodos] = useState(data);
 
+  // Add
   const addTodo = function (taskName) {
     const newTodo = {
       id: nanoid(),
@@ -41,24 +42,64 @@ function App() {
     setAllTodos((p) => [newTodo, ...p])
   }
 
+  // Delete
+  // id มาจาก data <App /> ส่ง props data[] ที่มี id ติดไปด้วย 
+  // เมื่อ onCLick // todoItem เรียก deleteTodo() พร้อมส่ง argument คือ id กลับขึ้นมาจาก App > TodoLists > TodoItem
+  const deleteTodo = function (todoId) {
+    const newAllTodos = allTodos.filter((listItem) => listItem.id !== todoId);
+    setAllTodos(newAllTodos);
+  }
 
-return (
-  <div className='todo'>
-    <div className='todo__header'>
-      <AppBar />
+  // Edit
+  const editTodo = function (todoId, newTodoObj) {
+
+    // // # Practice #1
+    // // หาของเดิม เอามาเทียบของใหม่
+    // let foundTodo = allTodos.find((todo) => (todo.id === todoId));
+    // if (!foundTodo) return;
+    // const newTodo = Object.assign({}, foundTodo, newTodoObj);
+
+    // let foundIndex = allTodos.findIndex((todo) => todo.id === todoId);
+    // if (foundIndex === -1) return;
+
+    // const newTodoLists = [...allTodos];
+    // newTodoLists.splice(foundIndex, 1, newTodo);
+    // setAllTodos(newTodoLists);
+
+    // // # Practice #2
+    // const newTodoLists = allTodos.map(function (todo) {
+    //   if (todo.id != todoId) return todo;
+    //   else return { ...todo, ...newTodoObj };
+    // });
+    // setAllTodos(newTodoLists);
+
+    // # Practice #3
+    const newTodoLists = allTodos.reduce((acc, todo) => {
+      if (todo.id !== todoId) acc.push(todo);
+      else acc.push({ ...todo, ...newTodoObj });
+      return acc;
+    }, []);
+    setAllTodos(newTodoLists)
+
+  };
+
+  return (
+    <div className='todo'>
+      <div className='todo__header'>
+        <AppBar />
+      </div>
+      <div className='todo__sidebar'>
+        <SideBar />
+      </div>
+      <div className='todo__content'>
+        <main className='todo__container'>
+          <TodoHeader />
+          <TodoCreate addTodo={addTodo} />
+          <TodoLists data={allTodos} deleteTodo={deleteTodo} editTodo={editTodo} />
+        </main>
+      </div>
     </div>
-    <div className='todo__sidebar'>
-      <SideBar />
-    </div>
-    <div className='todo__content'>
-      <main className='todo__container'>
-        <TodoHeader />
-        <TodoCreate addTodo={addTodo} />
-        <TodoLists data={allTodos} />
-      </main>
-    </div>
-  </div>
-);
+  );
 }
 
 export default App;

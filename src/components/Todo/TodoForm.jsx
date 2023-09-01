@@ -39,7 +39,6 @@ function TodoForm(props) {
 
   const handleSubmit = function (event) {
     event.preventDefault();
-
     // Form Validition
     if (taskInput.trim() === '') {
       console.log('Error');

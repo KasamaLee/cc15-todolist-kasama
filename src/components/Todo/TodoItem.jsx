@@ -5,9 +5,10 @@ import { HiOutlineCheck } from 'react-icons/hi';
 import TodoForm from "./TodoForm";
 import styles from './TodoItem.module.scss';
 
-function TodoItem({ id, task, done, date }) {
-    // Object Destructuring (Props)
-    // const { task, done, date } = props;
+
+// Object Destructuring (Props)
+// const { task, done, date } = props;
+function TodoItem({ id, task, done, date, deleteTodo, editTodo }) {
 
     const [isOpenForm, setIsOpenForm] = useState(false);
     // console.log(id);
@@ -16,6 +17,14 @@ function TodoItem({ id, task, done, date }) {
         setIsOpenForm(!isOpenForm);
     };
 
+    const handleDelete = function (event) {
+        deleteTodo(id);
+    }
+
+    const toggleStatus = () => {
+        const newTodoObj = { id, task, date, status: !done }
+        editTodo(id, newTodoObj);
+    }
     return (
         <>
             {isOpenForm ? (
@@ -26,7 +35,10 @@ function TodoItem({ id, task, done, date }) {
             ) : (
                 <li className={styles.todo}>
                     <div className={`${styles.todo__checkbox} ${done ? styles.todo__checkbox__done : ''}`}>
-                        <HiOutlineCheck className={styles.todo__checkbox__icon} />
+                        <HiOutlineCheck
+                            className={styles.todo__checkbox__icon}
+                            onClick={toggleStatus}
+                        />
                     </div>
 
                     <p className={`${styles.todo__task} ${done ? styles.todo__task__done : ''}`}>{task}</p>
@@ -35,7 +47,7 @@ function TodoItem({ id, task, done, date }) {
                         <span onClick={handleClick} >
                             <FaPen className={styles.todo__edit} />
                         </span>
-                        <span>
+                        <span onClick={handleDelete}>
                             <FaTrashAlt className={styles.todo__delete} />
                         </span>
                     </div>
