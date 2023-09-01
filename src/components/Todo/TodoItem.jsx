@@ -5,11 +5,12 @@ import { HiOutlineCheck } from 'react-icons/hi';
 import TodoForm from "./TodoForm";
 import styles from './TodoItem.module.scss';
 
-function TodoItem({ task, done, date }) {
+function TodoItem({ id, task, done, date }) {
     // Object Destructuring (Props)
     // const { task, done, date } = props;
 
     const [isOpenForm, setIsOpenForm] = useState(false);
+    // console.log(id);
 
     const handleClick = function (event) {
         setIsOpenForm(!isOpenForm);
@@ -28,7 +29,7 @@ function TodoItem({ task, done, date }) {
                         <HiOutlineCheck className={styles.todo__checkbox__icon} />
                     </div>
 
-                    <p className={`${styles.todo__task} ${styles.todo__task__done}`}>{task}</p>
+                    <p className={`${styles.todo__task} ${done ? styles.todo__task__done : ''}`}>{task}</p>
                     <span className={styles.todo__date}>{date}</span>
                     <div className={styles.todo__action}>
                         <span onClick={handleClick} >

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { nanoid } from 'nanoid';
 import { Button } from '../Common/Button/Button';
 import styles from './TodoForm.module.scss';
 
@@ -32,19 +33,22 @@ function TodoForm(props) {
     setTaskInput(event.target.value);
   };
 
+  // FormValidation
+  // case1 : submit ได้
+  // case2 : submit ไม่ได้ => แสดง Error
+
   const handleSubmit = function (event) {
     event.preventDefault();
-  
-    // FormValidation
-    // case1 : submit ได้
-    // case2 : submit ไม่ได้ => แสดง Error
-    console.log('submit');
-    if (taskInput.trim() === '') {
-      setIsError(true)
-    } else {
-      console.log('success');
-    }
 
+    // Form Validition
+    if (taskInput.trim() === '') {
+      console.log('Error');
+      setIsError(true)
+      return;
+    }
+   
+    props.addTodo(taskInput);
+    props.setIsOpenForm(false);
   };
 
   const handleCancel = function () {

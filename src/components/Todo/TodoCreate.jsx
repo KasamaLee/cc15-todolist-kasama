@@ -32,10 +32,9 @@ CC4 - React State (1 ในฟังก์ชันของกลุ่ม Reac
 */
 
 // #1 : FC = Function Component (Render)
-function TodoCreate() {
+function TodoCreate(props) {
     // HOOk FN
     const [isOpenForm, setIsOpenForm] = useState(false);
-    console.log(isOpenForm);
 
     // let active = true;
 
@@ -53,6 +52,9 @@ function TodoCreate() {
                 < TodoForm
                     textSubmit='Add Task'
                     setIsOpenForm={setIsOpenForm}
+                    data = {props.data}
+                    setTodo = {props.setTodo}
+                    addTodo = {props.addTodo}
                 />
             ) : (
                 <div className={styles.todo__create} onClick={handleClick}>
