@@ -1,149 +1,147 @@
 import { createContext } from 'react';
-import { useState } from "react";
-import { nanoid } from 'nanoid';
-
-
-
-// ชื่อ Context
-const TodoContext = createContext();
+import { useState, useEffect } from 'react';
+import dayjs from 'dayjs';
+import axios from 'axios';
 
 const END_POINT = 'http://localhost:8080/api/todos';
+axios.defaults.baseURL = 'http://localhost:8080/api';
 
+// ชื่อ Context => ใช้ทั้ง Provider, Consumer
+const TodoContext = createContext();
 
 // SetUp Context ฝั่ง Provider
 function TodoContextProvider(props) {
-    // DATA
     const [allTodos, setAllTodos] = useState([]);
+    const [showTodos, setShowTodos] = useState([]);
 
-    // #1 : Create
-    const addTodo = async function (taskName) {
-        const newTodo = {
-            id: nanoid(),
-            task: taskName,
-            status: false,
-            due_date: '2023-04-02',
-        };
-
-        try {
-            const options = {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: JSON.stringify(newTodo)
-            };
-            let response = await fetch(END_POINT, options);
-            let data = await response.json();
-            const createdTodo = { ...data.todo, due_date: data.todo.date };
-            delete createdTodo.date;
-
-            // Update State
-            setAllTodos((p) => [createdTodo, ...p])
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    // Search
+    const searchTodo = (keyword) => {
+        const newShowTodos = allTodos.filter((todoObj) =>
+            todoObj.task.toLowerCase().includes(keyword.toLowerCase())
+        );
+        setShowTodos(newShowTodos);
+    };
 
     // #2 : Read
-    async function fetchAllTodo() {
+    const fetchAllTodo = async () => {
         try {
-            let response = await fetch("http://localhost:8080/api/todos", { method: 'GET' });
-            let todoData = await response.json();
+            //   let response = await fetch('http://localhost:8080/api/todos', { method: 'GET' });
+            //   let todoData = await response.json();
+            const response = await axios.get('/todos');
 
-            const newTodoLists = todoData.todos.map((todo) => {
+            const newTodoLists = response.data.todos.map((todo) => {
                 const newTodo = { ...todo, due_date: todo.date };
                 delete todo.date;
                 return newTodo;
             });
-
             setAllTodos(newTodoLists);
+            setShowTodos(newTodoLists);
         } catch (error) {
             console.log(error);
         }
-    }
+    };
+
+    useEffect(() => {
+        fetchAllTodo();
+    }, []);
+
+    // #1 : Create
+    const addTodo = async function (taskName) {
+        console.log('add', taskName);
+        const newTodo = {
+            task: taskName,
+            status: false,
+            due_date: dayjs().format('YYYY-MM-DD'),
+        };
+
+        try {
+            // SEND REQUEST : POST
+            // WAIT RESPONSE
+            //   const options = {
+            //     method: 'POST',
+            //     headers: {
+            //       'Content-type': 'application/json',
+            //     },
+            //     body: JSON.stringify(newTodo),
+            //   };
+            //   let response = await fetch(END_POINT, options);
+            //   let data = await response.json();
+
+            const { data } = await axios.post('/todos',newTodo);
+
+            const createdTodo = { ...data.todo, due_date: data.todo.date };
+            delete createdTodo.date;
+
+            // Update STATE
+            setAllTodos((p) => [createdTodo, ...p]);
+            setShowTodos((p) => [createdTodo, ...p]);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     // #3 : Update
     const editTodo = async function (todoId, updateTodoObj) {
-        // console.log(updateTodoObj);
-
+        console.log('edit');
         try {
-            let foundIndex = allTodos.findIndex((todo) => todo.id === todoId);
-            if (foundIndex !== -1) {
+            // FindTodo
+            let foundedIndex = allTodos.findIndex((todo) => todo.id === todoId);
+            if (foundedIndex !== -1) {
                 // updateTodo
-                const updateTodo = { ...allTodos[foundIndex], ...updateTodoObj };
-                updateTodo.date = updateTodo.due_date;
+                const updatedTodo = { ...allTodos[foundedIndex], ...updateTodoObj };
+                updatedTodo.date = updatedTodo.due_date;
                 const options = {
                     method: 'PUT',
                     headers: {
-                        'Content-type': 'application/json'
+                        'Content-type': 'application/json',
                     },
-                    body: JSON.stringify(updateTodo)
-                }
-                const response = await fetch(`${END_POINT}/${todoId}`, options)
+                    body: JSON.stringify(updatedTodo),
+                };
+
+                const response = await fetch(`${END_POINT}/${todoId}`, options);
                 const data = await response.json();
-                // console.log(data.todo);
 
                 // UpdateState
                 const newTodoLists = [...allTodos];
-                newTodoLists[foundIndex] = { ...data.todo, due_date: data.todo.date };
+                newTodoLists[foundedIndex] = { ...data.todo, due_date: data.todo.date };
                 setAllTodos(newTodoLists);
+                setShowTodos(newTodoLists);
             }
         } catch (error) {
             console.log(error);
         }
-        // FindTodo
-
-        // // # Practice #1
-        // // หาของเดิม เอามาเทียบของใหม่
-        // let foundTodo = allTodos.find((todo) => (todo.id === todoId));
-        // if (!foundTodo) return;
-        // const newTodo = Object.assign({}, foundTodo, newTodoObj);
-
-        // let foundIndex = allTodos.findIndex((todo) => todo.id === todoId);
-        // if (foundIndex === -1) return;
-
-        // const newTodoLists = [...allTodos];
-        // newTodoLists.splice(foundIndex, 1, newTodo);
-        // setAllTodos(newTodoLists);
-
-        // // # Practice #2
-        // const newTodoLists = allTodos.map(function (todo) {
-        //   if (todo.id != todoId) return todo;
-        //   else return { ...todo, ...newTodoObj };
-        // });
-        // setAllTodos(newTodoLists);
-
-        // # Practice #3
-        // const newTodoLists = allTodos.reduce((acc, todo) => {
-        //   if (todo.id !== todoId) acc.push(todo);
-        //   else acc.push({ ...todo, ...newTodoObj });
-        //   return acc;
-        // }, []);
-        // setAllTodos(newTodoLists)
-
     };
 
     // #4 : Delete
-    // id มาจาก data <App /> ส่ง props data[] ที่มี id ติดไปด้วย 
-    // เมื่อ onCLick // todoItem เรียก deleteTodo() พร้อมส่ง argument คือ id กลับขึ้นมาจาก App > TodoLists > TodoItem
     const deleteTodo = async function (todoId) {
         try {
-            const options = { method: 'DELETE' };
-            let response = await fetch(`${END_POINT}/${todoId}`, options);
-            if (response.status == 204) {
-                const newAllTodos = allTodos.filter((listItem) => listItem.id !== todoId);
-                setAllTodos(newAllTodos);
+            // const options = { method: 'DELETE' };
+            // let response = await fetch(`${END_POINT}/${todoId}`, options);
+            const response = await axios.delete(`todos/${todoId}`)
+            if (response.status === 204) {
+                setAllTodos((prev) => prev.filter((todo) => todo.id !== todoId));
+                setShowTodos((prev) => prev.filter((todo) => todo.id !== todoId));
             }
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
+    const sharedObj = {
+        allTodos,
+        showTodos,
+        addTodo,
+        fetchAllTodo,
+        editTodo,
+        deleteTodo,
+        searchTodo,
+    };
 
-    const sharedObj = { value: 60, addTodo, deleteTodo, editTodo, allTodos, setAllTodos, fetchAllTodo };
-
-    return <TodoContext.Provider value={sharedObj} >{props.children}</TodoContext.Provider>
+    return <TodoContext.Provider value={sharedObj}>{props.children}</TodoContext.Provider>;
 }
 
+// export ไปครอบ UI
 export default TodoContextProvider;
+
+// export ไปให้ consumer
 export { TodoContext };

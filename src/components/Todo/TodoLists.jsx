@@ -11,11 +11,11 @@ dataRender = Array[]<TodoItem task=... done=... date=... />
 
 function TodoLists(props) {
   // const {allTodos} = useContext(TodoContext);
-  const {allTodos} = useTodo();
+  const {showTodos} = useTodo();
 
   return (
     <ul className={styles.todo__lists}>
-      {allTodos.map((todoObj) => (
+      {showTodos.map((todoObj) => (
         <TodoItem
           key={todoObj.id}
           id={todoObj.id}
