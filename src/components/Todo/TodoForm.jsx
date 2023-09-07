@@ -18,13 +18,15 @@ CC1 - Form Handle
 props = {
   textSubmit : string
   setIsOpenForm : FN
+  oldTodo: {id,task,status,due_date}
+  addTodo: FN
+  editTodo: FN
 }
 */
 
-
 function TodoForm(props) {
   const [isError, setIsError] = useState(false);
-  const [taskInput, setTaskInput] = useState('');
+  const [taskInput, setTaskInput] = useState(props.oldTodo?.task || '');
 
   const handleChangeInput = function (event) {
     setTaskInput(event.target.value);
@@ -41,12 +43,15 @@ function TodoForm(props) {
     event.preventDefault();
     // Form Validition
     if (taskInput.trim() === '') {
-      console.log('Error');
+      console.log('Error'); 
       setIsError(true)
       return;
     }
-   
-    props.addTodo(taskInput);
+
+    if (props.addTodo) props.addTodo(taskInput);
+    else if (props.editTodo && props.oldTodo) {
+      props.editTodo(props.oldTodo.id, {task: taskInput})
+    }
     props.setIsOpenForm(false);
   };
 

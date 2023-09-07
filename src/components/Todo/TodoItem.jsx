@@ -31,6 +31,8 @@ function TodoItem({ id, task, done, date, deleteTodo, editTodo }) {
                 < TodoForm
                     textSubmit='Edit Task'
                     setIsOpenForm={setIsOpenForm}
+                    editTodo={editTodo}
+                    oldTodo={{ id, task, done, date }}
                 />
             ) : (
                 <li className={styles.todo}>
