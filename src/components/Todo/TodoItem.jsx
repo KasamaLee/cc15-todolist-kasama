@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { FaTrashAlt, FaPen } from 'react-icons/fa';
 import { HiOutlineCheck } from 'react-icons/hi';
+import useTodo from '../../hooks/useTodo';
 
 import TodoForm from "./TodoForm";
 import styles from './TodoItem.module.scss';
@@ -8,9 +9,10 @@ import styles from './TodoItem.module.scss';
 
 // Object Destructuring (Props)
 // const { task, done, date } = props;
-function TodoItem({ id, task, done, date, deleteTodo, editTodo }) {
+function TodoItem({ id, task, done, date }) {
 
     const [isOpenForm, setIsOpenForm] = useState(false);
+    const { deleteTodo, editTodo } = useTodo();
     // console.log(id);
 
     const handleClick = function (event) {
@@ -22,8 +24,7 @@ function TodoItem({ id, task, done, date, deleteTodo, editTodo }) {
     }
 
     const toggleStatus = () => {
-        const newTodoObj = { id, task, date, status: !done }
-        editTodo(id, newTodoObj);
+        editTodo(id, {status: !done});
     }
     return (
         <>
